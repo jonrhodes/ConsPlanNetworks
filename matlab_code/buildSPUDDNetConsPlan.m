@@ -1,6 +1,3 @@
-%% 13 feb 2013
-% iadine.chades@csiro.au
-
 % This is the main file to call to define the problem (FMDP)
 
 function buildSPUDDNetConsPlan(G,BR,pr,pd,pir,pid,cost,Shape,filename,Model)

@@ -25,7 +25,7 @@ else
             terminal(y,1)=sites(y,1); % not terminal -> keep going
             terminal(y,2)=-1; % not terminal -> keep going
         end
-        
+
         %action nodes can be reserve site or no nothing
         matches = strfind(tline, '[shape=box');  %action nodes
         num = length(matches);
@@ -34,7 +34,7 @@ else
             y = y + 1;
             expr=';".(\d*)" [label = "reserveS(\d*)';
             [tok mat] = regexp(tline, expr, 'tokens', 'match');
-            
+
             if ~isempty(tok)
                 Ct{y}=tok{1,:};
                 terminal(y,1)=str2num(char(Ct{y}(1)));
@@ -44,7 +44,7 @@ else
             end
             expr=';".(\d*)" [label = "do_Nothing';
             [tok mat] = regexp(tline, expr, 'tokens', 'match');
-            
+
             if ~isempty(tok)
                 Ct{y}=tok{1,:};
                 terminal(y,1)=str2num(char(Ct{y}(1)));  % do nothing
@@ -57,4 +57,5 @@ else
     end
     fclose(fid);
 end
+
 end

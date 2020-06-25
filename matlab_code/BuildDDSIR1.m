@@ -1,6 +1,5 @@
 %% recursive Decision Diagrams building function
 % This function builds the CPT using a decision diagram (DD) library
-% author: iadine chades
 % INPUT:
 % nliste : list of nodes connected to the node Id (list of variables to be
 % considered)
@@ -28,7 +27,7 @@ if isempty(nliste)
     end
 else % neigbours
     % node
-    longueur = size(nliste,2);    
+    longueur = size(nliste,2);
     tree_DD = DDnode.myNew(nliste(1), ...
         [BuildDDSIR1(nliste(2:1:longueur),Id,pr,pd,pir,pid,nr,nd,flag), ...    % Available
         BuildDDSIR1(nliste(2:1:longueur),Id,pr,pd,pir,pid,nr+1,nd,flag), ...     % Reserved

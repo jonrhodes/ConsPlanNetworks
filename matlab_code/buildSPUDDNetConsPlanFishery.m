@@ -1,6 +1,3 @@
-%% 13 feb 2013
-% iadine.chades@csiro.au
-
 % This is the main file to call to define the problem (FMDP)
 
 function buildSPUDDNetConsPlanFishery(G,BR,pr,pd,pir,pid,cost,filename,Model)

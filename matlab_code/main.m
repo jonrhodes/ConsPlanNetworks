@@ -1,5 +1,5 @@
 function main(Shape,Model,nSites)
-$solves and evaluates simulations
+$solves and evaluates the simulations
 %Shape='line','island','star','wheel','islandstar','islandline','starline'
 %note here 'island' is referred to as 'ring' in the associated manuscript
 %Model = 1 (reserved and developed both influence development) or = 2

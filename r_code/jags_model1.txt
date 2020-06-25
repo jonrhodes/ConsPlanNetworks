@@ -1,4 +1,4 @@
-#model with interactions between the social variables and the ecological variables
+#jags model with interactions between the social variables and the ecological variables
 model {
 
 #fixed-effects and random-effects at the BRRep level - these are ecological community effects

@@ -1,6 +1,3 @@
-%% 13 feb 2013
-% iadine.chades@csiro.au
-
 % This is the main file to call to define and solve the problem (FMDP)
 
 function solveNetConsPlan(G,Shape,pr,pd,pir,pid,filename,Model)

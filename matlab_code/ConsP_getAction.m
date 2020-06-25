@@ -1,6 +1,6 @@
 function action=ConsP_getAction(Mstate,Mgraph,terminalAct)
 % input:
-% Mstate is a vector of size the number of sites and takes {1,2,3} value 
+% Mstate is a vector of size the number of sites and takes {1,2,3} value
 % for each element. assuming: avail=1; res=2; dev = 3;
 % e.g. state=[1 2 3] is site1 = avail, site2=res, site3 =dev
 % output:
@@ -18,7 +18,7 @@ if Mstate(1:3)==([1; 0; 2;]+1)
 end
 
 for i=1:k % go through each state unless node is terminal
-   
+
     if terminalAct(node_r)==-1  % node is not an action
         val=Mstate(site_r); % avail=1, res=2, dev=3
         next_node=Mgraph(node_r,val);
@@ -29,11 +29,11 @@ for i=1:k % go through each state unless node is terminal
         %action=terminalAct(node_r);
         break
     end
-        
+
 end
-action=terminalAct(node_r); % in case action is not allocated prior 
+action=terminalAct(node_r); % in case action is not allocated prior
                             % to knowing all the states - e.g. normal case
-                            
+
 if action<0
     'err getAction'
     disp(node_r)
@@ -45,8 +45,8 @@ function [site_r,node_r]=get_root(Mgraph)
 % the root site only appears once on the 4th column of Mgraph
 % need to check that.
 % input: Mgraph the policy graph
-% output: 
-% site_r 
+% output:
+% site_r
 % node_r
 [n,x]= size(Mgraph);
 
@@ -61,17 +61,16 @@ while okay==0 && i<=n
         if site_r==Mgraph(k,4)  % site_r is not the root
             okay=0;
             i=i+1;
-            break  
-        end  
+            break
+        end
     end
     for k=i+1:n
         if site_r==Mgraph(k,4)  % site_r is not the root
             okay=0;
             i=i+1;
-            break  
-        end  
+            break
+        end
     end
 end
 
-end
-    
+end    

@@ -1,6 +1,6 @@
 function action=getAction(Mstate,Mgraph,terminalAct)
 % input:
-% Mstate is a vector of size the number of sites and takes {1,2,3} value 
+% Mstate is a vector of size the number of sites and takes {1,2,3} value
 % for each element. assuming: avail=1; res=2; dev = 3;
 % e.g. state=[1 2 3] is site1 = avail, site2=res, site3 =dev
 % output:
@@ -23,9 +23,9 @@ for i=1:k % go through each state unless node is terminal
     else %node is terminal => get action!
         break
     end
-        
+
 end
-action=terminalAct(node_r,2); % in case action is not allocated prior 
+action=terminalAct(node_r,2); % in case action is not allocated prior
                             % to knowing all the states - e.g. normal case
 
 if action>0
@@ -33,10 +33,11 @@ if action>0
        'bad action'
    end
 end
-               
+
 if action<0
     'err getAction'
     disp(node_r)
     disp(Mstate)
 end
-end  
+
+end

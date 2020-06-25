@@ -1,6 +1,5 @@
 % recursive Decision Diagrams building function
 % This function builds the CPT using a decision diagram (DD) library
-% author: iadine chades
 % INPUT:
 % nliste : list of nodes connected to the node Id (list of variables to be
 % considered)
@@ -21,14 +20,14 @@ if isempty(nliste)
         % Leaf!
         pR=round(pr*precision_n)/precision_n;
         pD=abs(max(0,round((1-pR)*(pd*precision_n))/precision_n));
-        pA=abs(max(0,round((1-pD-pR)*precision_n)/precision_n));        
+        pA=abs(max(0,round((1-pD-pR)*precision_n)/precision_n));
     else
         % Leaf!
         pR=round((pr+(1-pr)*(1-prod(1-(wliste*pir.*nr))))*precision_n)/precision_n;
         pD=abs(max(0,round((1-pR)*(pd+(1-pd)*(1-prod(1-(wliste*pid.*nd))))*precision_n)/precision_n));
         pA=abs(max(0,round((1-pD-pR)*precision_n)/precision_n));
     end
-        
+
     if flag == 1 % P(Id'= reserved| ...
         tree_DD = DDleaf.myNew(pR);
     elseif flag == 2 % P(Id'= developed| ...

@@ -1,5 +1,5 @@
 function main_fishery(Model)
-%solves and evaluates fishery case study
+%solves and evaluates the fishery case study
 %Model=1 (reserved and developed both influence development) or 2
 %(reserved and developed both influence reservation) or 3 (reserved
 %influences reservation and developed influences development)

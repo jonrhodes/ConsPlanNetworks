@@ -1,9 +1,3 @@
-%% update that SIS model ASAP
-% todo
-% management+col;
-% parameters
-
-
 function ddMDP=fillddMDPNetSIR1(pr,pd,pir,pid,cost,BR,parentParcels)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -27,7 +21,6 @@ function ddMDP=fillddMDPNetSIR1(pr,pd,pir,pid,cost,BR,parentParcels)
 
 %%%%%%%%%%%%%%%%% State variables %%%%%%%%%%%%%%%%%%%%%%%
 
-
 %eff=tr.pm;
 %noeff=1-tr.pm;
 % detect0=tr.pdm;
@@ -38,8 +31,6 @@ function ddMDP=fillddMDPNetSIR1(pr,pd,pir,pid,cost,BR,parentParcels)
 %cost_m=1;
 %reward=cost_m*RewM_ratio;
 %cost_s=cost_m/MS_ratio;
-
-
 
 ddMDP.nStateVars = length(parentParcels);
 
@@ -83,19 +74,19 @@ for actId = 1:ddMDP.nActions
     else
         ddMDP.actions(actId).name = 'do_Nothing';
     end
-    
+
     for parcelId = 1:ddMDP.nStateVars
         % parcel is managed
         if actId == parcelId
-            
+
             nr=0;   % number of reserved neighbours
             nd=0;   % number of developed neigbours
             liste = parentParcels{parcelId}; % copy the list of parents of node parcelId
             Left=BuildDDSIR1(liste,parcelId,pr,pd,pir,pid,nr,nd,0);  % p(site'=avail| ...
             Centre=BuildDDSIR1(liste,parcelId,pr,pd,pir,pid,nr,nd,1); % p(site'=reserv|...
             Right=BuildDDSIR1(liste,parcelId,pr,pd,pir,pid,nr,nd,2); % p(site'=dev|...
-            
-            
+
+
             ddMDP.actions(actId).transFn(parcelId)= DDnode.myNew(parcelId+ddMDP.nVars, ...
                 [DDnode.myNew(parcelId,[Left,DDleaf.myNew(0),DDleaf.myNew(0)]),... % p(site'=avail| ...
                 DDnode.myNew(parcelId,[Centre,DDleaf.myNew(1),DDleaf.myNew(0)]),...         % p(site'=reserv|...
@@ -109,8 +100,8 @@ for actId = 1:ddMDP.nActions
             %Left.display()
             Centre=BuildDDSIR1(liste,parcelId,prZ,pd,pir,pid,nr,nd,1); % p(site'=reserv|...
             Right=BuildDDSIR1(liste,parcelId,prZ,pd,pir,pid,nr,nd,2); % p(site'=dev|...
-            
-            
+
+
             ddMDP.actions(actId).transFn(parcelId)= DDnode.myNew(parcelId+ddMDP.nVars, ...
                 [DDnode.myNew(parcelId,[Left,DDleaf.myNew(0),DDleaf.myNew(0)]),... % p(site'=avail| ...
                 DDnode.myNew(parcelId,[Centre,DDleaf.myNew(1),DDleaf.myNew(0)]),...         % p(site'=reserv|...
@@ -119,48 +110,29 @@ for actId = 1:ddMDP.nActions
     end
 end
 
-%%%%%%%%%%%%%%%%% Observation function %%%%%%%%%%%%%%%%%%%%%
-
-
-%%%%%%%%%%%%%%%%%%% Reward function %%%%%%%%%%%%%%%%%%%%%%
-%%% DONT KNOW
+%%%%%%%%%%%%%%%%%%% Cost function %%%%%%%%%%%%%%%%%%%%%%
 for actId = 1:ddMDP.nActions
-    
-    % reward for each machine that's up
-    %OP.actions(actId).rewFn = DD.zero;
-    %for parcelId = 1:ddMDP.nStateVars
-    %    ddMDP.actions(actId).rewFn(parcelId) = DDnode.myNew(parcelId,[DD.zero,DDleaf.myNew(sum(BR(parcelId,:))),DD.zero]);
-    %end
-    
-    % for a given action build the reward tree based on the state of each
-    % site in the network. This is the reward for state st+1
-    % the reward represents the marginal benefit of the action.
-    
-    
     % cost for managing
     if actId <= ddMDP.nStateVars
-        sitelist=[1:actId-1,actId+1:ddMDP.nStateVars];
-        %'Construit recompense pour '
-        %MarginalTree=BuildDDMarginalRew(actId,sitelist(2:end),BR,BR(actId,:),zeros(1,size(BR,2)));
-        %rewTree= DDnode.myNew(actId,[DD.zero,MarginalTree,DD.zero]);
-        
-        %sitelist=[1:1:ddMDP.nStateVars];
-        MarginalTree=BuildDDMarginalRew(sitelist,BR,BR(actId,:),zeros(1,size(BR,2)));
-        
-        rewTree= DDnode.myNew(actId,[DD.zero,MarginalTree,DD.zero]);
-        % no reward if the parcel we manage is available or developped
-        ddMDP.actions(actId).rewFn = [rewTree, DDleaf.myNew(cost)];
+        ddMDP.actions(actId).costFn=[DDleaf.myNew(cost)];
     else % action do nothing
-        ddMDP.actions(actId).rewFn = DD.zero;
+        ddMDP.actions(actId).costFn=DD.zero;
     end
 end
+
+%%%%%%%%%%%%%%%%%%% Reward function %%%%%%%%%%%%%%%%%%%%%%
+sitelist=[2:ddMDP.nStateVars];
+Left=BuildDDRew(sitelist,BR,zeros(1,size(BR,2))); %available
+Centre=BuildDDRew(sitelist,BR,BR(1,:)); %reserved
+Right=BuildDDRew(sitelist,BR,zeros(1,size(BR,2))); %developed
+
+ddMDP.rewFn=DDnode.myNew(1,[Left,Centre,Right]);
 
 %%%%%%%%%%%%%%%%%% Discount Factor %%%%%%%%%%%%%%%%%%%%%%%%
 
 ddMDP.discFact = 0.96;
 
 %%%%%%%%%%%%%%%%%% Initial Belief State %%%%%%%%%%%%%%%%%%%%%%%%
-
 
 ddInit = DD.one;
 for parcelId = 1:ddMDP.nStateVars

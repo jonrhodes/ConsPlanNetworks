@@ -1,7 +1,3 @@
-%% 13 feb 2013
-% iadine.chades@csiro.au
-% paper: Conservation planning across time and actors
-
 % This is the main file to call to define and solve the problem (FMDP)
 
 function solveNetConsPlanFishery(G,pr,pd,pir,pid,filename,Model)

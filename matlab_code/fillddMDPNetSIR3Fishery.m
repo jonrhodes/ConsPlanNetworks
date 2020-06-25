@@ -64,14 +64,14 @@ for actId = 1:ddMDP.nActions
     else
         ddMDP.actions(actId).name = 'do_Nothing';
     end
-    
+
     for parcelId = 1:ddMDP.nStateVars
         % parcel is managed => Look at the neighbors too!!!
         if actId == parcelId
             nr=zeros(1,length(parentParcels{parcelId}));   % matrix of reserved neighbours
             nd=zeros(1,length(parentParcels{parcelId}));   % matrix of developed neigbours
             liste = parentParcels{parcelId}; % copy the list of parents of node parcelId
-            listew = parentWeights{parcelId}; %copt the list of weights 
+            listew = parentWeights{parcelId}; %copt the list of weights
             %check if no neigbours
             if isempty(liste)
                 neighb = 0;
@@ -81,19 +81,19 @@ for actId = 1:ddMDP.nActions
             Left=BuildDDSIR3Fishery(liste,listew,parcelId,pr,pd,pir,pid,nr,nd,0,neighb);  % p(site'=avail| ...
             Centre=BuildDDSIR3Fishery(liste,listew,parcelId,pr,pd,pir,pid,nr,nd,1,neighb); % p(site'=reserv|...
             Right=BuildDDSIR3Fishery(liste,listew,parcelId,pr,pd,pir,pid,nr,nd,2,neighb); % p(site'=dev|...
-            
+
             ddMDP.actions(actId).transFn(parcelId)= DDnode.myNew(parcelId+ddMDP.nVars, ...
                 [DDnode.myNew(parcelId,[Left,DDleaf.myNew(0),DDleaf.myNew(0)]),... % p(site'=avail| ...
                 DDnode.myNew(parcelId,[Centre,DDleaf.myNew(1),DDleaf.myNew(0)]),...         % p(site'=reserv|...
                 DDnode.myNew(parcelId,[Right,DDleaf.myNew(0),DDleaf.myNew(1)])]);           % p(site'=dev|...
-            
+
         else % parcel not managed
             nr=zeros(1,length(parentParcels{parcelId}));   % matrix of reserved neighbours
             nd=zeros(1,length(parentParcels{parcelId}));   % matrix of developed neigbours
             prZ=0;
             pirZ=0;
             liste = parentParcels{parcelId}; % copy the list of parents of node parcelId
-            listew = parentWeights{parcelId}; %copt the list of weights 
+            listew = parentWeights{parcelId}; %copt the list of weights
             %check if no neigbours
             if isempty(liste)
                 neighb = 0;
@@ -103,7 +103,7 @@ for actId = 1:ddMDP.nActions
             Left=BuildDDSIR3Fishery(liste,listew,parcelId,prZ,pd,pirZ,pid,nr,nd,0,neighb);  % p(site'=avail| ...
             Centre=BuildDDSIR3Fishery(liste,listew,parcelId,prZ,pd,pirZ,pid,nr,nd,1,neighb); % p(site'=reserv|...
             Right=BuildDDSIR3Fishery(liste,listew,parcelId,prZ,pd,pirZ,pid,nr,nd,2,neighb); % p(site'=dev|...
-            
+
             ddMDP.actions(actId).transFn(parcelId)=DDnode.myNew(parcelId+ddMDP.nVars, ...
                 [DDnode.myNew(parcelId,[Left,DDleaf.myNew(0),DDleaf.myNew(0)]),... % p(site'=avail| ...
                 DDnode.myNew(parcelId,[Centre,DDleaf.myNew(1),DDleaf.myNew(0)]),...         % p(site'=reserv|...
@@ -136,7 +136,6 @@ ddMDP.discFact = 0.96;
 
 %%%%%%%%%%%%%%%%%% Initial Belief State %%%%%%%%%%%%%%%%%%%%%%%%
 
-
 ddInit = DD.one;
 for parcelId = 1:ddMDP.nStateVars
     ddInit = OP.mult(ddInit, DDnode.myNew(parcelId,[DDleaf.myNew(1),DDleaf.myNew(0),DDleaf.myNew(0)]));
@@ -154,4 +153,3 @@ end
 maxDiffRew = maxVal - minVal;
 maxDiffVal = maxDiffRew/(1-min(0.95,ddMDP.discFact));
 ddMDP.tolerance = 1e-5 * maxDiffVal;
-

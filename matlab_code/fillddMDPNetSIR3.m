@@ -62,7 +62,7 @@ for actId = 1:ddMDP.nActions
     else
         ddMDP.actions(actId).name = 'do_Nothing';
     end
-    
+
     for parcelId = 1:ddMDP.nStateVars
         % parcel is managed => Look at the neighbors too!!!
         if actId == parcelId
@@ -73,12 +73,12 @@ for actId = 1:ddMDP.nActions
             % check BUG pir and nr, nd inverted in other file.
             Centre=BuildDDSIR3(liste,parcelId,pr,pd,pir,pid,nr,nd,1); % p(site'=reserv|...
             Right=BuildDDSIR3(liste,parcelId,pr,pd,pir,pid,nr,nd,2); % p(site'=dev|...
-            
+
             ddMDP.actions(actId).transFn(parcelId)= DDnode.myNew(parcelId+ddMDP.nVars, ...
                 [DDnode.myNew(parcelId,[Left,DDleaf.myNew(0),DDleaf.myNew(0)]),... % p(site'=avail| ...
                 DDnode.myNew(parcelId,[Centre,DDleaf.myNew(1),DDleaf.myNew(0)]),...         % p(site'=reserv|...
                 DDnode.myNew(parcelId,[Right,DDleaf.myNew(0),DDleaf.myNew(1)])]);           % p(site'=dev|...
-            
+
         else % parcel not managed
             nr=0;   % number of reserved neighbours
             nd=0;   % number of developed neigbours
@@ -89,7 +89,7 @@ for actId = 1:ddMDP.nActions
             % check BUG pir and nr, nd inverted in other file.
             Centre=BuildDDSIR3(liste,parcelId,prZ,pd,pirZ,pid,nr,nd,1); % p(site'=reserv|...
             Right=BuildDDSIR3(liste,parcelId,prZ,pd,pirZ,pid,nr,nd,2); % p(site'=dev|...
-            
+
             ddMDP.actions(actId).transFn(parcelId)=DDnode.myNew(parcelId+ddMDP.nVars, ...
                 [DDnode.myNew(parcelId,[Left,DDleaf.myNew(0),DDleaf.myNew(0)]),... % p(site'=avail| ...
                 DDnode.myNew(parcelId,[Centre,DDleaf.myNew(1),DDleaf.myNew(0)]),...         % p(site'=reserv|...
@@ -122,7 +122,6 @@ ddMDP.discFact = 0.96;
 
 %%%%%%%%%%%%%%%%%% Initial Belief State %%%%%%%%%%%%%%%%%%%%%%%%
 
-
 ddInit = DD.one;
 for parcelId = 1:ddMDP.nStateVars
     ddInit = OP.mult(ddInit, DDnode.myNew(parcelId,[DDleaf.myNew(1),DDleaf.myNew(0),DDleaf.myNew(0)]));
@@ -140,4 +139,3 @@ end
 maxDiffRew = maxVal - minVal;
 maxDiffVal = maxDiffRew/(1-min(0.95,ddMDP.discFact));
 ddMDP.tolerance = 1e-5 * maxDiffVal;
-
